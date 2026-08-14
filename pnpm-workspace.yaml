@@ -1,0 +1,8 @@
+# pnpm-workspace.yaml
+# Tells pnpm: "everything under apps/* is its own package"
+packages:
+  - "apps/*"
+allowBuilds:
+  '@prisma/engines': true
+  prisma: false
+  unrs-resolver: true
