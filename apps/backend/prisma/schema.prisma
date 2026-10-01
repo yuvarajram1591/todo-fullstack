@@ -1,11 +1,36 @@
 generator client {
   provider     = "prisma-client"
   output       = "../generated/prisma"
-  moduleFormat = "cjs"   // ← forces CommonJS output to match NestJS's default build target
+  moduleFormat = "cjs" // ← forces CommonJS output to match NestJS's default build target
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model User {
+  id        String  @id @default(uuid())
+  email     String  @unique
+  name      String?
+  avatarUrl String?
+
+  googleId String? @unique // set only for Google sign-ins
+  password String? // set only for email/password sign-ins (bcrypt hash)
+
+  resetToken       String?   @unique
+  resetTokenExpiry DateTime?
+
+  createdAt DateTime @default(now())
+  todos     Todo[]
+}
+
+model Todo {
+  id        String   @id @default(uuid())
+  title     String
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
 }
 
 model HealthCheck {
